@@ -1,0 +1,1 @@
+Integrated Gradients foi utilizado para analisar uma predição da InceptionTime 1D treinada sobre sinais brutos de ECG. A figura destaca regiões temporais e derivações que mais contribuíram para a classe predita pelo modelo. Essa interpretação descreve o comportamento da rede para a amostra analisada e não constitui causalidade médica nem validação clínica da predição.

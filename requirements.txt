@@ -1,0 +1,4 @@
+-e .[dev]
+
+# Deep learning baseline opcional:
+# tensorflow>=2.15

@@ -1,0 +1,37 @@
+.env
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+# Dados e artefatos pesados
+data/raw/*
+data/interim/*
+data/processed/*
+models/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!models/.gitkeep
+
+# Artefatos regeneráveis
+reports/figures/*
+reports/tables/*
+reports/model_cards/*
+!reports/figures/.gitkeep
+!reports/figures/architecture_pipeline.mmd
+!reports/tables/.gitkeep
+!reports/model_cards/.gitkeep
+
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+debug.log
+.vscode/
+.idea/

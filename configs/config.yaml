@@ -1,0 +1,162 @@
+project:
+  seed: 42
+
+data:
+  base_dir: data/raw/ptb-xl/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3
+  expected_version: "PTB-XL 1.0.3"
+  # Use 100 para records100/filename_lr ou 500 para records500/filename_hr.
+  # records100 permanece como padrão para desenvolvimento e depuração.
+  signal_frequency: 100
+  metadata_file: ptbxl_database.csv
+  scp_statements_file: scp_statements.csv
+
+labels:
+  strategy: strict_single_label
+  superclasses: [NORM, MI, STTC, CD, HYP]
+  alternative_strategy: primary_by_scp_weight
+
+folds:
+  train: [1, 2, 3, 4, 5, 6, 7, 8]
+  validation: [9]
+  test: [10]
+
+features:
+  include_metadata: true
+  include_fft_features: false
+  max_records: null
+
+balancing:
+  use_smote: true
+  compare_without_smote: true
+  smote_k_neighbors: 5
+
+models:
+  logistic_regression:
+    max_iter: 2000
+    C: [0.1, 1.0, 10.0]
+  svm:
+    alpha: [0.0001, 0.001]
+    kernel: [linear]
+  random_forest:
+    n_estimators: [200]
+    max_depth: [null, 20]
+  lightgbm:
+    n_estimators: [300]
+    learning_rate: [0.05, 0.1]
+  catboost:
+    iterations: [300]
+    learning_rate: [0.05, 0.1]
+
+deep_learning:
+  enabled: true
+  epochs: 40
+  batch_size: 64
+  learning_rate: 0.001
+  patience: 8
+  resnet1d:
+    enabled: true
+    # A ResNet1D usa records500 por padrão para preservar mais informação temporal.
+    signal_frequency: 500
+    epochs: 12
+    batch_size: 64
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    patience: 4
+    reduce_lr_patience: 2
+    reduce_lr_factor: 0.5
+    min_lr: 0.000001
+    base_filters: 32
+    kernel_size: 7
+    dropout: 0.25
+    num_workers: 0
+    cache_dtype: float16
+    force_rebuild_cache: false
+    max_records: null
+
+deep_learning_strong:
+  model_name: inceptiontime1d_strong
+  frequency: 500
+  batch_size: 64
+  epochs: 80
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  patience: 18
+  num_workers: 0
+  use_amp: true
+  class_weight: true
+  loss_type: focal
+  focal_gamma: 1.5
+  scheduler: reduce_on_plateau
+  seed: 42
+  base_channels: 64
+  block_channels: [64, 64, 128, 128, 256, 256]
+  kernel_sizes: [9, 19, 39]
+  bottleneck_channels: 32
+  dropout: 0.25
+  gradient_clip: 1.0
+  weighted_sampler: false
+  max_records: null
+  force_rebuild_cache: false
+  augmentations:
+    enabled: true
+    noise_std: 0.01
+    scale_min: 0.9
+    scale_max: 1.1
+    time_shift: 40
+    channel_dropout_prob: 0.03
+
+deep_learning_heavy:
+  enabled: true
+  frequency: 500
+  model_family: inceptiontime_resnet_ensemble
+  # Em CPU, o codigo limita automaticamente para uma execucao pesada controlada.
+  # Em GPU, pode usar duas arquiteturas e ensemble por media de probabilidades.
+  architectures: [resnet1d_se, inceptiontime_deep]
+  max_runs_cpu: 1
+  max_runs_cuda: 2
+  epochs: 120
+  patience: 20
+  batch_size: auto
+  learning_rate: 0.001
+  min_learning_rate: 0.000001
+  weight_decay: 0.0001
+  optimizer: adamw
+  scheduler: cosine_or_plateau
+  loss_type: cross_entropy_weighted
+  use_focal_loss: true
+  focal_gamma: 2.0
+  use_class_weight: true
+  use_weighted_sampler: true
+  use_augmentation: true
+  use_amp: true
+  gradient_clip_norm: 1.0
+  num_workers: auto
+  seeds: [42, 123, 2025]
+  cache_dtype: float16
+  force_rebuild_cache: false
+  max_records: null
+  monitor: val_f1_macro
+  inceptiontime_deep:
+    base_channels: 96
+    block_channels: [96, 96, 128, 128, 192, 192, 256, 256]
+    kernel_sizes: [9, 19, 39]
+    bottleneck_channels: 48
+    dropout: 0.3
+  resnet1d_se:
+    base_filters: 32
+    stage_channels: [32, 32, 64, 64, 128, 128, 128, 128]
+    kernel_size: 9
+    dropout: 0.3
+    se_reduction: 8
+  augmentations:
+    noise_std: 0.01
+    scale_min: 0.9
+    scale_max: 1.1
+    time_shift: 60
+    channel_dropout_prob: 0.04
+
+outputs:
+  figures_dir: reports/figures
+  tables_dir: reports/tables
+  models_dir: models
+  processed_dir: data/processed

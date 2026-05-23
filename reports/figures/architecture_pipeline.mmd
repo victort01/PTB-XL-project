@@ -1,0 +1,19 @@
+flowchart TD
+    A["PTB-XL"] --> B["Carregamento dos metadados"]
+    A --> C["Leitura dos sinais ECG"]
+    B --> D["Tratamento de idade: age 300 -> flag + NaN"]
+    B --> E["Construção dos rótulos multiclasse"]
+    C --> F["Extração de features estatísticas"]
+    D --> F
+    E --> G["Split por strat_fold: treino 1-8, validação 9, teste 10"]
+    F --> G
+    G --> H["Balanceamento apenas no treino"]
+    H --> I["Treinamento dos modelos clássicos"]
+    G --> J["CNN 1D simples opcional"]
+    G --> N["ResNet1D leve com sinais brutos"]
+    I --> K["Avaliação final no teste"]
+    J --> K
+    N --> K
+    K --> L["Interpretabilidade com SHAP e LIME"]
+    K --> M["Exportação de tabelas e figuras para LaTeX"]
+    L --> M
