@@ -843,6 +843,8 @@ def train_deep_learning_heavy(metadata: pd.DataFrame, config: dict[str, Any]) ->
 
 
 def generate_balance_and_split_artifacts(metadata: pd.DataFrame, config: dict[str, Any]) -> dict[str, Path]:
-    from tcc_ecg.dl_data import generate_balance_and_split_artifacts as _generate_balance_and_split_artifacts
+    from tcc_ecg.dl_data import (
+        generate_balance_and_split_artifacts as _generate_balance_and_split_artifacts,
+    )
 
     return _generate_balance_and_split_artifacts(metadata, config)

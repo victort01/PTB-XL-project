@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tcc-ecg-ptbxl"
 version = "0.1.0"
-description = "Projeto notebook-first para classificacao multiclasse de ECGs de 12 derivacoes usando PTB-XL."
+description = "Pipeline reprodutivel para classificacao multiclasse e multilabel de ECGs PTB-XL."
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "TCC PTB-XL" }]
@@ -27,6 +27,7 @@ dependencies = [
     "lime>=0.2",
     "jupyter>=1.0",
     "ipykernel>=6.0",
+    "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
@@ -38,6 +39,12 @@ dev = [
 dl = [
     "torch>=2.0",
     "tensorflow>=2.15",
+]
+tcc2 = [
+    "torch>=2.2",
+    "captum>=0.7",
+    "psutil>=5.9",
+    "tqdm>=4.66",
 ]
 
 [tool.setuptools.packages.find]
@@ -54,3 +61,7 @@ target-version = "py310"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/compare_frequencies.py" = ["E402"]
+"scripts/interpret_inceptiontime_integrated_gradients.py" = ["E402"]

@@ -35,10 +35,12 @@ if str(SRC_DIR) not in sys.path:
 from tcc_ecg.config import load_config
 from tcc_ecg.data import prepare_metadata
 from tcc_ecg.deep_learning import build_resnet1d_cache, compute_train_channel_normalization
-from tcc_ecg.deep_learning_strong import build_inceptiontime1d_model, get_deep_learning_strong_config
+from tcc_ecg.deep_learning_strong import (
+    build_inceptiontime1d_model,
+    get_deep_learning_strong_config,
+)
 from tcc_ecg.models import split_by_folds
 from tcc_ecg.paths import ensure_dir, resolve_project_path
-
 
 LEAD_NAMES = ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"]
 PREFERRED_CLASSES = ["MI", "HYP", "STTC"]

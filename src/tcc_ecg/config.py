@@ -14,6 +14,12 @@ from tcc_ecg.paths import get_project_root, resolve_project_path
 def load_config(path: str | Path | None = None) -> dict[str, Any]:
     """Carrega `configs/config.yaml` e aplica overrides simples por ambiente."""
     root = get_project_root()
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(root / ".env", override=False)
+    except ImportError:
+        pass
     config_path = resolve_project_path(path or "configs/config.yaml", root)
     if not config_path.exists():
         raise FileNotFoundError(f"Arquivo de configuracao nao encontrado: {config_path}")

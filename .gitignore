@@ -35,3 +35,12 @@ Thumbs.db
 debug.log
 .vscode/
 .idea/
+.tmp/
+
+# Repositorios externos sao obtidos em commits pinados, nao versionados aqui
+external/
+
+# Manifests locais podem conter caminhos e hashes de checkpoints pesados
+reports/manifests/*
+!reports/manifests/.gitkeep
+reports/logs/tcc2/

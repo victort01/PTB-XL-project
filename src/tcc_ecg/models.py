@@ -11,8 +11,7 @@ import pandas as pd
 from imblearn.pipeline import Pipeline as ImbPipeline
 from sklearn.base import clone
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.metrics import f1_score
 from sklearn.model_selection import ParameterGrid
 

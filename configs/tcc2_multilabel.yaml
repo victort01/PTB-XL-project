@@ -1,0 +1,114 @@
+project:
+  name: tcc2_ptbxl_multilabel
+  seed: 42
+  seeds: [42, 123, 2025]
+
+data:
+  base_dir: data/raw/ptb-xl/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3
+  expected_version: "PTB-XL 1.0.3"
+  metadata_file: ptbxl_database.csv
+  scp_statements_file: scp_statements.csv
+  cache_dir: data/processed/tcc2
+  classical_features_path: data/processed/tcc2/features_multilabel_500hz.parquet
+  benchmark_frequency: 100
+  classical_frequency: 500
+  extension_frequency: 500
+  signal_frequency: 500
+
+labels:
+  task: multilabel
+  strategy: diagnostic_superclasses_multilabel
+  superclasses: [NORM, MI, STTC, CD, HYP]
+
+folds:
+  train: [1, 2, 3, 4, 5, 6, 7, 8]
+  validation: [9]
+  test: [10]
+
+protocol:
+  selection_split: validation
+  primary_metric: macro_auroc
+  threshold_source: validation
+  lock_test: true
+  require_frozen_manifest: true
+  allow_repeat_test_evaluation: false
+
+features:
+  include_metadata: true
+  include_fft_features: true
+  max_records: null
+
+balancing:
+  classical_strategy: class_weight
+  deep_learning_strategy: pos_weight
+  use_smote_multilabel: false
+  validation_balanced: false
+  test_balanced: false
+
+models:
+  classical:
+    logistic_regression:
+      max_iter: 2000
+      C: 1.0
+    svm:
+      alpha: 0.0001
+      max_iter: 3000
+    random_forest:
+      n_estimators: 400
+      max_depth: null
+    lightgbm:
+      n_estimators: 400
+      learning_rate: 0.05
+    catboost:
+      iterations: 400
+      learning_rate: 0.05
+  tcn:
+    channels: [64, 64, 128, 128]
+    kernel_size: 7
+    dropout: 0.2
+  external:
+    helme_models:
+      - fastai_inception1d
+      - fastai_xresnet1d101
+      - fastai_resnet1d_wang
+      - fastai_fcn_wang
+      - fastai_lstm
+      - fastai_lstm_bidir
+    s4_model: s4
+    ecg_jepa_config: finetune
+
+training:
+  device: auto
+  epochs: 100
+  batch_size: 64
+  learning_rate: 0.001
+  min_learning_rate: 0.000001
+  weight_decay: 0.0001
+  patience: 15
+  num_workers: 0
+  use_amp: true
+  gradient_clip_norm: 1.0
+  resume: true
+  cache_dtype: float16
+  max_records: null
+  augmentations:
+    enabled: true
+    noise_std: 0.01
+    scale_min: 0.95
+    scale_max: 1.05
+    time_shift: 40
+    channel_dropout_prob: 0.02
+  force_rebuild_cache: false
+
+external_validation:
+  candidates_config: configs/external_datasets.yaml
+  selected: null
+  evaluate_once: true
+
+outputs:
+  figures_dir: reports/figures/tcc2
+  tables_dir: reports/tables/tcc2
+  models_dir: models/tcc2
+  processed_dir: data/processed/tcc2
+  manifests_dir: reports/manifests/tcc2
+  logs_dir: reports/logs/tcc2

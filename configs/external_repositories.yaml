@@ -1,0 +1,30 @@
+repositories:
+  helme_benchmark:
+    url: https://github.com/helme/ecg_ptbxl_benchmarking.git
+    commit: cdbf4e66d7e57d9b6a2657b6024716212b8d0afa
+    license: GPL-3.0
+    destination: external/ecg_ptbxl_benchmarking
+    role: benchmark_original
+    frequency: 100
+  ssm_ecg:
+    url: https://github.com/tmehari/ssm_ecg.git
+    commit: 94b6cc708d70e4b832e91c8494f9595a320f8dd7
+    license: MIT
+    destination: external/ssm_ecg
+    role: s4
+    frequency: 100
+  ecg_jepa:
+    url: https://github.com/kweimann/ECG-JEPA.git
+    commit: 504b4e5b55c2de3c6dca0492435b993a8f4a4013
+    license: MIT
+    destination: external/ECG-JEPA
+    role: self_supervised
+    frequency: 100
+  ecg_selfsupervised:
+    url: https://github.com/tmehari/ecg-selfsupervised.git
+    commit: 956c6c17c9496b2ba459638c613c6efc148b95df
+    license: GPL-3.0
+    destination: external/ecg-selfsupervised
+    role: cpc_contingency
+    frequency: 100
+

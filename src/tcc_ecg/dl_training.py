@@ -174,7 +174,6 @@ class Candidate:
 def train_deep_learning_heavy(metadata: pd.DataFrame, config: dict[str, Any]) -> dict[str, Any]:
     """Treina arquitetura(s) pesada(s) e avalia teste apenas apos selecao por validacao."""
     torch = _import_torch()
-    from torch.utils.data import DataLoader
 
     heavy_config = get_deep_learning_heavy_config(config)
     if not bool(heavy_config["enabled"]):

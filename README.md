@@ -2,6 +2,8 @@
 
 Projeto notebook-first para um TCC sobre classificação multiclasse de eletrocardiogramas de 12 derivações usando o dataset PTB-XL, modelos clássicos de Machine Learning, balanceamento de dados e interpretabilidade.
 
+O estado consolidado do TCC I permanece na branch `tcc1-final`. O desenvolvimento do TCC II ocorre na branch `tcc2-development` e adiciona uma trilha multilabel separada, sem alterar os resultados históricos.
+
 ## Objetivo Acadêmico
 
 Comparar Regressão Logística, SVM, Random Forest, LightGBM, CatBoost e um baseline simples de deep learning para classificar ECGs nas superclasses diagnósticas `NORM`, `MI`, `STTC`, `CD` e `HYP`. A métrica principal é F1-score macro, pois o problema é desbalanceado. A acurácia também é reportada.
@@ -17,6 +19,51 @@ models/           modelos treinados nao versionados
 src/tcc_ecg/      codigo reutilizavel
 tests/            testes pequenos sem depender do PTB-XL completo
 ```
+
+## TCC II: protocolo multilabel
+
+O protocolo principal do TCC II está em `configs/tcc2_multilabel.yaml` e mantém as cinco superclasses `NORM`, `MI`, `STTC`, `CD` e `HYP` como rótulos binários simultâneos. Ele usa treino nos folds 1--8, validação no fold 9 e teste interno no fold 10. A seleção, os thresholds e o congelamento usam somente a validação; o fold 10 exige um manifesto congelado e um comando explícito.
+
+Instalação recomendada em uma clonagem limpa:
+
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# Linux/macOS: source .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -e ".[dev,tcc2]"
+# Alternativa equivalente: python -m pip install -r requirements-tcc2.txt
+python -m pytest -q
+python scripts/train_tcc2.py smoke --config configs/tcc2_multilabel.yaml
+```
+
+Fluxo operacional:
+
+```bash
+# Auditoria sem inferência das bases externas configuradas
+python scripts/audit_external_dataset.py --config configs/tcc2_multilabel.yaml
+
+# Checkouts independentes e pinados de Helme, S4, ECG-JEPA e CPC
+python scripts/fetch_external_repositories.py --config configs/external_repositories.yaml
+
+# Atributos multilabel dos modelos clássicos em 500 Hz
+python scripts/prepare_tcc2_features.py --config configs/tcc2_multilabel.yaml
+
+# Treino de um candidato usando somente treino e validação
+python scripts/train_tcc2.py train --config configs/tcc2_multilabel.yaml --model tcn
+
+# Congelamento após comparação pelo fold 9
+python scripts/train_tcc2.py freeze --config configs/tcc2_multilabel.yaml \
+  --candidate-manifest models/tcc2/tcn/seed_42/candidate_manifest.json
+
+# Somente depois do congelamento formal
+python scripts/train_tcc2.py evaluate-test --config configs/tcc2_multilabel.yaml \
+  --frozen-manifest reports/manifests/tcc2/frozen_tcn.json
+```
+
+Os repositórios externos não são copiados para este Git. Eles são obtidos em `external/`, que é ignorado, e posicionados nos commits registrados em `configs/external_repositories.yaml`. As implementações originais de Helme e S4 possuem ambientes legados próprios e não são silenciosamente substituídas pelas arquiteturas reduzidas do TCC I.
+
+Consulte `docs/tcc2/EXECUTION_GUIDE.md`, `docs/tcc2/PROTOCOL.md` e `docs/tcc2/MODEL_INVENTORY.md` antes dos experimentos longos.
 
 ## Configuração do Ambiente
 

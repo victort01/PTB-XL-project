@@ -1,0 +1,38 @@
+candidates:
+  georgia:
+    display_name: Georgia 12-lead ECG Challenge Database
+    path_env: GEORGIA_DATA_DIR
+    recommendation: primary
+    expected_leads: 12
+    expected_frequency: 500
+    label_system: SNOMED-CT multilabel
+    role: external_validation
+    contamination_check: required
+  code15:
+    display_name: CODE-15%
+    path_env: CODE15_DATA_DIR
+    recommendation: complementary
+    expected_leads: 12
+    expected_frequency: 400
+    label_system: dataset-specific multilabel
+    role: brazilian_analysis_or_pretraining
+    contamination_check: required
+  mimic_iv_ecg:
+    display_name: MIMIC-IV-ECG
+    path_env: MIMIC_IV_ECG_DATA_DIR
+    recommendation: future
+    expected_leads: 12
+    expected_frequency: 500
+    label_system: derived_from_clinical_reports
+    role: pretraining_or_future_external_validation
+    contamination_check: required
+  icbeb2018:
+    display_name: ICBEB2018
+    path_env: ICBEB2018_DATA_DIR
+    recommendation: secondary
+    expected_leads: 12
+    expected_frequency: 500
+    label_system: challenge_classes
+    role: transfer_or_secondary_benchmark
+    contamination_check: required
+

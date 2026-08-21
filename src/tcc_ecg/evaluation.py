@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -11,9 +10,9 @@ from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
     classification_report,
+    f1_score,
     precision_score,
     recall_score,
-    f1_score,
 )
 
 from tcc_ecg.paths import resolve_project_path

@@ -1,5 +1,16 @@
 # Experiment Log
 
+## Infraestrutura TCC II - 2026-08-21
+
+- Branch: `tcc2-development`.
+- Tarefa preparada: multilabel com NORM, MI, STTC, CD e HYP.
+- Protocolo: treino 1-8, validação 9, teste 10 bloqueado.
+- Testes: 24 aprovados após as alterações.
+- Smoke tests: cinco modelos clássicos aprovados em ajuste/predição e TCN aprovada em forward e treino/validação sintéticos.
+- Repositórios externos: origem, licença e commits registrados; nenhum treinamento externo executado.
+- Bases externas: auditoria preparada; dados externos não disponíveis nos caminhos locais.
+- Resultados científicos novos: nenhum.
+
 
 ## Deep Learning Strong - InceptionTime1D
 
